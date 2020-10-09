@@ -48,7 +48,7 @@ describe('<SkeletonPage />', () => {
       expect(displayText).toHaveLength(0);
     });
 
-    it('passes large to the size prop of DisplayText', () => {
+    it('passes large to the size prop of DisplayText by default', () => {
       const skeletonPage = mountWithAppProvider(
         <SkeletonPage title="Products" />,
       );
@@ -69,10 +69,58 @@ describe('<SkeletonPage />', () => {
       expect(skeletonPage.find(SkeletonDisplayText)).toHaveLength(1);
     });
 
-    it('passes large to the size prop of SkeletonDisplayText', () => {
+    it('passes large to the size prop of SkeletonDisplayText by default', () => {
       const skeletonPage = mountWithAppProvider(<SkeletonPage title="" />);
       const skeletonDisplayText = skeletonPage.find(SkeletonDisplayText);
       expect(skeletonDisplayText.prop('size')).toBe('large');
+    });
+
+    describe('when the new design language is enabled', () => {
+      it('passes large to the size prop of DisplayText if navigation is collapsed', () => {
+        const skeletonPage = mountWithAppProvider(
+          <SkeletonPage title="Products" />,
+          {
+            features: {newDesignLanguage: true},
+            mediaQuery: {isNavigationCollapsed: true},
+          },
+        );
+
+        const displayText = skeletonPage.find(DisplayText);
+        expect(displayText.prop('size')).toBe('large');
+      });
+
+      it('passes large to the size prop of SkeletonDisplayText if navigation is collapsed', () => {
+        const skeletonPage = mountWithAppProvider(<SkeletonPage title="" />, {
+          features: {newDesignLanguage: true},
+          mediaQuery: {isNavigationCollapsed: true},
+        });
+
+        const skeletonDisplayText = skeletonPage.find(SkeletonDisplayText);
+        expect(skeletonDisplayText.prop('size')).toBe('large');
+      });
+
+      it('passes small to the size prop of DisplayText if navigation is not collapsed', () => {
+        const skeletonPage = mountWithAppProvider(
+          <SkeletonPage title="Products" />,
+          {
+            features: {newDesignLanguage: true},
+            mediaQuery: {isNavigationCollapsed: false},
+          },
+        );
+
+        const displayText = skeletonPage.find(DisplayText);
+        expect(displayText.prop('size')).toBe('small');
+      });
+
+      it('passes small to the size prop of SkeletonDisplayText if navigation is not collapsed', () => {
+        const skeletonPage = mountWithAppProvider(<SkeletonPage title="" />, {
+          features: {newDesignLanguage: true},
+          mediaQuery: {isNavigationCollapsed: false},
+        });
+
+        const skeletonDisplayText = skeletonPage.find(SkeletonDisplayText);
+        expect(skeletonDisplayText.prop('size')).toBe('small');
+      });
     });
   });
 

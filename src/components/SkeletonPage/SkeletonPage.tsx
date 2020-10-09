@@ -3,7 +3,9 @@ import React from 'react';
 import {classNames} from '../../utilities/css';
 import {useFeatures} from '../../utilities/features';
 import {useI18n} from '../../utilities/i18n';
+import {useMediaQuery} from '../../utilities/media-query';
 import {DisplayText} from '../DisplayText';
+import {TextStyle} from '../TextStyle';
 import {SkeletonDisplayText} from '../SkeletonDisplayText';
 import {SkeletonBodyText} from '../SkeletonBodyText';
 
@@ -26,6 +28,11 @@ export interface SkeletonPageProps {
   children?: React.ReactNode;
 }
 
+enum TitleDisplaySize {
+  Small = 'small',
+  Large = 'large',
+}
+
 export function SkeletonPage({
   children,
   fullWidth,
@@ -37,6 +44,7 @@ export function SkeletonPage({
 }: SkeletonPageProps) {
   const i18n = useI18n();
   const {newDesignLanguage} = useFeatures();
+  const {isNavigationCollapsed} = useMediaQuery();
 
   const className = classNames(
     styles.Page,
@@ -51,7 +59,18 @@ export function SkeletonPage({
     secondaryActions && styles['Header-hasSecondaryActions'],
   );
 
-  const titleMarkup = title !== null ? renderTitle(title) : null;
+  const getTitleDisplaySize = (): TitleDisplaySize => {
+    if (newDesignLanguage) {
+      return isNavigationCollapsed
+        ? TitleDisplaySize.Large
+        : TitleDisplaySize.Small;
+    }
+
+    return TitleDisplaySize.Large;
+  };
+
+  const titleMarkup =
+    title !== null ? renderTitle(title, getTitleDisplaySize()) : null;
 
   const primaryActionMarkup = primaryAction ? (
     <div className={styles.PrimaryAction}>
@@ -101,13 +120,16 @@ function renderSecondaryActions(actionCount: number) {
   return <div className={styles.Actions}>{actions}</div>;
 }
 
-function renderTitle(title: string) {
+function renderTitle(
+  title: string,
+  displaySize: TitleDisplaySize = TitleDisplaySize.Large,
+) {
   const titleContent =
     title === '' ? (
-      <SkeletonDisplayText size="large" />
+      <SkeletonDisplayText size={displaySize} />
     ) : (
-      <DisplayText size="large" element="h1">
-        {title}
+      <DisplayText size={displaySize} element="h1">
+        <TextStyle variation="strong">{title}</TextStyle>
       </DisplayText>
     );
   return <div className={styles.Title}>{titleContent}</div>;
