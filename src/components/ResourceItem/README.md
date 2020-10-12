@@ -51,6 +51,12 @@ function ResourceItemExample() {
             title: 'How To Get Value From Wireframes',
             author: 'Jonathan Mangrove',
           },
+          {
+            id: 7,
+            url: 'posts/7',
+            title: 'Design Systems 101',
+            author: 'Jonathan Mangrove',
+          },
         ]}
         selectedItems={selectedItems}
         onSelectionChange={setSelectedItems}
