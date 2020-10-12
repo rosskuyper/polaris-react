@@ -32,6 +32,8 @@ $item-wrapper-loading-height: rem(64px);
   position: relative;
   background-color: var(--p-surface, color('white'));
   z-index: resource-list(header-outer-wrapper-stacking-order);
+  border-top-left-radius: var(--p-border-radius-wide);
+  border-top-right-radius: var(--p-border-radius-wide);
 
   + .ResourceList {
     border-top: border('divider');
@@ -61,6 +63,8 @@ $item-wrapper-loading-height: rem(64px);
   padding: resource-list(header-vertical-padding)
     resource-list(header-padding-small);
   background-color: var(--p-surface, color('white'));
+  border-top-left-radius: var(--p-border-radius-wide);
+  border-top-right-radius: var(--p-border-radius-wide);
 
   @include breakpoint-after(resource-list(breakpoint-small)) {
     flex-direction: row;
